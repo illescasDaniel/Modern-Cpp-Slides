@@ -4,7 +4,7 @@ Slides about good practices and new c++ content.
 
 Theme used by this presentation: [Metropolis](https://github.com/matze/mtheme)
 
--> Spanish version: https://github.com/illescasDaniel/Modern-Cpp-Spanish
+-> Versión en español: https://github.com/illescasDaniel/Modern-Cpp-Spanish
 
 # Preview
 
