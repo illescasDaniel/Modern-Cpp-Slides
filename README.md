@@ -24,7 +24,7 @@ It was compiled with Texpad using LuaLaTex and BibTex for the bibliography.
 
 # License
 
-Anybody has permissions to download, modify or redistribute with slides.
+Anybody has permissions to download, modify or redistribute these slides.
 
 The only requirement is to include the LICENSE file.
 
