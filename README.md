@@ -18,7 +18,7 @@ Recommended C++ programming Style guide: https://github.com/illescasDaniel/CppSt
 
 # Download
 
-You can download it in the Releases tab, or [here](https://github.com/illescasDaniel/Modern-Cpp-Slides/releases/download/v1.0/Modern.C.-.Daniel.Illescas.Romero.pdf).
+You can download it in the Releases tab, or the latest version from [here](https://github.com/illescasDaniel/Modern-Cpp-Slides/raw/master/slides.pdf).
 
 # Compilation
 
