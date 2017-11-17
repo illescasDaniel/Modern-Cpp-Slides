@@ -918,7 +918,7 @@
 			\end{itemize}
 		\end{frame}
 		
-		\begin{frame}[fragile]{Good practices and tips for classes}	
+		\begin{frame}[fragile]{Good practices and tips for classes \smallCite{cppbestpractices}}	
 			\subsection{Good practices and tips for classes}
 			\begin{itemize}
 				\normalSizeItem { include/Human.hpp }
@@ -951,15 +951,13 @@
 			\end{itemize}
 		\end{frame}
 		
-		\begin{frame}[fragile]{Buenas prácticas y consejos para clases}	
+		\begin{frame}[fragile]{Good practices and tips for classes}	
 			\begin{itemize}
 				\normalSizeItem { Main.cpp }
 				\begin{lstlisting}[basicstyle={\tiny\ttfamily}]
 				#include "include/Human.hpp"
 				
-				// using namespace evt; (opcional)
-				
-				// using namespace evt; (opcional)
+				// using namespace evt; (optional)
 				
 				// Is not advisable to pass complex types by copy...
 				// void giveMeTheObject(evt::Human human) { ... }
