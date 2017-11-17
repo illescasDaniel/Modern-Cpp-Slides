@@ -1,0 +1,1042 @@
+\documentclass{beamer}
+
+\usetheme{metropolis}
+\usepackage{listings} % Código
+%\usepackage[utf8]{inputenc}
+\usepackage[normalem]{ulem} % Tachar texto (con \sout)
+\usepackage[english]{babel}
+\usepackage{hyperref}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.52,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.4,0,0.7}
+\definecolor{customBlue}{rgb}{0.1,0.1,0.65}
+\definecolor{customOrange}{rgb}{0.88,0.53,0.13}
+
+% Cambiar tipo letra
+%\setsansfont{Arial}
+
+\usepackage{fontspec}
+\setmonofont[
+  Contextuals={Alternate}
+]{Fira Code}
+
+\lstset{frame=tb,
+  language=c++,
+  aboveskip=5mm,
+  belowskip=5mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\scriptsize\ttfamily},
+  numbers=left, 
+  numberstyle=\tiny, 
+  stepnumber=1, 
+  numbersep=8pt,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{customBlue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=4,
+  gobble=16
+}
+
+\lstset{literate=
+    {->}{{{\texttt{-> }}}}1
+    {<-}{{{\texttt{<- }}}}1    
+    {<->}{{{\texttt{<-> }}}}1
+}
+
+%\lstset{literate=%
+%    *{0}{{{\color{customOrange}0}}}1
+%    {1}{{{\color{customOrange}1}}}1
+%    {2}{{{\color{customOrange}2}}}1
+%    {3}{{{\color{customOrange}3}}}1
+%    {4}{{{\color{customOrange}4}}}1
+%    {5}{{{\color{customOrange}5}}}1
+%    {6}{{{\color{customOrange}6}}}1
+%    {7}{{{\color{customOrange}7}}}1
+%    {8}{{{\color{customOrange}8}}}1
+%    {9}{{{\color{customOrange}9}}}1
+%}
+
+\newcommand{\normalSizeItem}[1] {
+  \normalsize{\item #1}
+}
+
+\newcommand{\newFrameWithoutIndex}[1]{
+	\begin{frame}
+		#1
+		\thispagestyle{empty}
+	\end{frame}
+}
+
+\newcommand{\newSectionWithoutIndex}[1]{
+	\newFrameWithoutIndex{\section{#1}}
+}
+
+\newcommand{\urlItem}[1]{
+	\footnotesize{\item {\url {#1}}}
+}
+
+\newcommand{\tinyUrlItem}[1]{
+	\tiny{\item {\url {#1}}}
+}
+  
+\newcommand{\smallCite}[1]{
+	\begin{small}
+		\cite{#1}	
+	\end{small}
+}
+
+\title{Modern C++}
+\author{Daniel Illescas Romero}
+\date{\today}
+\institute{University Of Granada [UGR]}
+
+\setcounter{tocdepth}{1} % 2 para mostrar subsecciones
+\setcounter{secnumdepth}{2}
+\setbeamerfont{subsection in toc}{size=\tiny}
+
+\begin{document}
+
+	\newFrameWithoutIndex{\maketitle}
+	
+	\begin{frame}{Index}		
+		\setbeamertemplate{section in toc}[sections numbered]
+		\tableofcontents
+	\end{frame}
+
+	\newSectionWithoutIndex{Style \& Good practices}
+  
+		\begin{frame}[fragile]{Naming convention}	
+			\subsection{Naming convention}
+			\begin{itemize}
+			
+				\normalSizeItem {Bad idea}
+				\begin{lstlisting}
+				int main() {
+					int a, b;
+					double c;
+				}
+				\end{lstlisting}
+				
+				\normalSizeItem {Good idea}
+				\begin{lstlisting}
+				int main() {
+					unsigned int age = 20;
+					int points = 0;
+					float height = 1.7;
+				}
+				\end{lstlisting}
+				
+			\end{itemize}
+		\end{frame}
+			 
+		\begin{frame}[fragile]{Naming convention}	
+			\begin{itemize}
+			
+				\normalSizeItem{Best idea \textbf{[C++11]}}
+				\begin{lstlisting}
+				int main() {
+					uint8_t age{10};
+					int64_t points{}; 
+					float height{};
+				}
+				\end{lstlisting}
+				
+				\normalSizeItem{Freak! \textbf{[C++11]}}
+				\begin{lstlisting}
+				int main() {
+					auto age = uint8_t{20};
+					auto points = int64_t{0};
+					auto height = float{5.67};
+				}
+				\end{lstlisting}
+				
+			\end{itemize}
+		\end{frame}
+		
+		\begin{frame}[fragile]{Programming styles}	
+			\subsection{Programming styles}
+			\begin{itemize}
+			
+				\normalSizeItem{Variable names \smallCite{namingConvention}}
+				\begin{lstlisting}
+				// Delimiter separated words
+				float daniel_height = 1.7;
+				// CamelCase (letter-case separated words)
+				float johnHeight = 1.7;
+				\end{lstlisting}
+				
+				\normalSizeItem{Braces (use it always!) \smallCite{indentationStyle}}
+				\begin{lstlisting}
+				// K&R (Kernighan and Ritchie)
+				if () {
+				
+				}
+				// Allman
+				if ()
+				{
+				
+				}
+				\end{lstlisting}
+				
+			\end{itemize}
+		\end{frame}
+		
+		\begin{frame}[fragile]{Macros \& global variables}	
+			\subsection{Macros \& global variables}
+			\begin{itemize}
+			
+				\normalSizeItem{Avoid the use of macros}
+				\begin{lstlisting}
+				// Type?, Scope?
+				// Is not constant and can be undefined
+				#define PI 3.14159
+				#define SIZE 10
+				
+				int main() {
+					
+					// float PI = 10; -> Would be: float 3.14159 = 10 ¿?
+					
+					int numbers[SIZE];
+					
+					#undef SIZE
+					
+					// Error: "SIZE" is not declared...
+					cout << SIZE << endl;
+				}
+				\end{lstlisting}
+				
+			\end{itemize}
+		\end{frame}
+		
+		\begin{frame}[fragile]{Macros \& global variables}	
+			\begin{itemize}
+			
+				\normalSizeItem{Try NOT to use global variables}
+				\begin{lstlisting}[basicstyle={\tiny\ttfamily}]
+				#include <vector>
+				#include <array>
+				
+				// It leads to many problems... BAD IDEA
+				// Ambiguity ERROR with: std::__1::size
+				int size = 20; // Can a size be negative?
+				
+				namespace utils { // This would be a safe alternative
+					constexpr size_t arraySize = 20;
+				}
+				
+				// How do I pass an array? You don't know the size here
+				void doSomething(int arr[]) {}
+				
+				void doSomething(int arr[size]) {} // NO...
+				
+				// Valid option
+				void doSomething(int* arr, const size_t arrSize) {}
+				
+				// If you know it's size
+				void doSomething(std::array<int,20> arr) {}
+				
+				// If you DON'T know it's size
+				void doSomething(std::vector<int> arr) {}
+				\end{lstlisting}
+				
+			\end{itemize}
+		\end{frame}
+		
+		\begin{frame}[fragile]{Platform dependency}	
+			\subsection{Platform dependency}		
+			\begin{itemize}
+
+				\normalSizeItem { The use of \texttt{system} can lead to many errors}
+				\begin{lstlisting}
+				// It doesn't work in the Windows command line (CMD)
+				std::system("ls -l > test.txt");
+				\end{lstlisting}
+				
+				\normalSizeItem { If you use old and dependent libraries you can't get \textbf{portable} code \smallCite{posixThreads}}
+				\begin{lstlisting}[basicstyle={\tiny\ttfamily}]
+				#include <pthread.h>
+
+				void* print_message_function(void* ptr) {
+					char *message;
+					message = (char *) ptr;
+					printf("%s \n", message);
+				}
+				
+				int main() {
+			
+					int iret1 = pthread_create(&thread1, NULL, print_message_function, (void*) message1);
+				}
+
+				\end{lstlisting}
+				
+			\end{itemize}
+		\end{frame}
+		
+		\begin{frame}[fragile]{Platform dependency}	
+			\begin{itemize}
+
+				\normalSizeItem { Try to use the own language libraries, or at least updated ones }
+				\begin{lstlisting}[basicstyle={\tiny\ttfamily}]
+				#include <thread>
+				
+				void doSomething(int number) { ... }
+				void doSomething2(int& number) { ... }
+				
+				int main() {
+				
+					int number = 0;
+					
+					// Pass by value
+					std::thread thread1(doSomething, number + 1); 
+					
+					// Pass by reference
+					std::thread thread2(doSomething2, std::ref(number)); 
+					
+					// thread3 is running "doSomething2()", thread2 is no longer a thread
+					std::thread thread3(std::move(thread2)); 
+					
+					thread1.join();
+					thread3.join();					
+				}
+				
+				\end{lstlisting}
+				
+			\end{itemize}
+		\end{frame}
+		
+		\begin{frame}[fragile]{Semantic Versioning \smallCite{semanticVersioning}}	
+			
+			\textbf{Naming:} MAJOR.MINOR.PATCH
+			\newline\newline
+			Example: \textbf{1.3.4}
+		
+			Increment the version when you:
+			\begin{itemize}
+				\normalSizeItem { \textbf{MAJOR}: make incompatible API changes}
+				\normalSizeItem { \textbf{MINOR}: add functionality in a backwards-compatible manner}
+				\normalSizeItem { \textbf{PATH}: make backwards-compatible bug fixes}
+			\end{itemize}
+		\end{frame}
+		
+		\begin{frame}[fragile]{Semantic Versioning}	
+			
+			How you should do it:
+			\begin{itemize}
+				\item Start with the \textbf{0.1} version
+				\item While the SW is in development increase the \textbf{0.x.y }version
+				\item Use \textbf{v1.0.0} for production
+				\item Try not to use really big numbers
+			\end{itemize}
+		\end{frame}
+		
+		\newSectionWithoutIndex{New in C++}	
+		
+		\begin{frame}[fragile]{\texttt{auto}, type inference -\smallCite{cppReference}}\subsection{\texttt{auto}, type inference}	
+			\begin{itemize}
+			
+				\normalSizeItem{Basic types}
+				\begin{lstlisting}
+				auto number = 2; // int
+				auto width = 0.5; // double
+				auto name = "daniel"; // const char*
+				auto name = "daniel"s; // string
+				\end{lstlisting}
+				
+				\normalSizeItem{More complex ones}
+				\begin{lstlisting}[basicstyle={\tiny\ttfamily}]
+				vector<int> points{1,2,3};
+				
+				for (vector<int>::iterator it = points.begin(); it != points.end(); ++it) {
+					cout << *it << endl;
+				}
+				for (auto it = points.begin(); it != points.end(); ++it) {
+					cout << *it << endl;
+				}
+				\end{lstlisting}
+				
+			\end{itemize}
+		\end{frame}
+		
+		\begin{frame}[fragile]{\texttt{auto}, type inference}	
+			\begin{itemize}
+			
+				\normalSizeItem{Can be used also in functions with large type names}
+				\begin{lstlisting}[basicstyle={\tiny\ttfamily}]
+				std::chrono::time_point<std::chrono::high_resolution_clock> now() {
+					return std::chrono::high_resolution_clock::now();
+				}
+				
+				auto now() {
+					return std::chrono::high_resolution_clock::now();
+				}
+				\end{lstlisting}
+								
+				\normalSizeItem { Other ways }
+				\begin{lstlisting}[basicstyle={\tiny\ttfamily}]
+				auto add(int value, double value2) -> decltype(value + value2) {
+					return value + value2;
+				}
+				auto calculateWeight(...) -> double { ... }
+				\end{lstlisting}
+				
+			\end{itemize}
+		\end{frame}
+		
+		\begin{frame}[fragile]{Fixed width integers types [C++11] \& \textit{brace initializer}}	
+			\subsection{Fixed width integers types [C++11] \& ``brace initializer''}
+			\begin{itemize}
+			
+				\normalSizeItem{Main types}
+				\begin{lstlisting}[basicstyle={\tiny\ttfamily}]
+				#include <cstdint>
+
+				int8_t, uint8_t  // Signed/ Unsigned type with 8 bits
+				int16_t, uint16_t // 16 bits
+				int32_t, uint32_t  // 32 bits
+				int64_t, uint64_t // 64 bits
+				intmax_t, uintmax_t // Largest capacity (usually 64 bits)
+				size_t // To represent array capacities [Unsigned 64 bits integer]
+				\end{lstlisting}
+								
+				\normalSizeItem { Correctly initialising types }
+				\begin{lstlisting}
+				uint64_t bigStuff {643456787654};
+				int32_t things = {3500000000};
+				// uint8_t age {-20}; // Compilation error
+				things += {2000000000};
+				// things = 1205032704 :(
+				// you can't avoid overflow...
+				\end{lstlisting}
+				
+			\end{itemize}
+		\end{frame}
+		
+		\begin{frame}[fragile]{\sout{NULL}, \ttfamily{nullptr}}	
+			\subsection{\sout{NULL}, \ttfamily{nullptr}}
+			\begin{itemize}
+			
+				\normalSizeItem { NULL can lead to errors! }
+				\begin{lstlisting}[basicstyle={\tiny\ttfamily}]
+				void doSomething(int* ptrI) { ... }
+				void doSomething(double* ptrD) { ... }
+				void doSomething(std::nullptr_t nullPointer) { ... } 
+				
+				int main() {
+				
+					int* ptrI;
+					double* ptrD;
+				 
+					doSomething(ptrI);
+					doSomething(ptrD);
+					doSomething(nullptr);  // ambiguous without void f(nullptr_t)
+					//doSomething(NULL);  // ambiguous: all functions are candidates
+				}
+				\end{lstlisting}
+				
+				\normalSizeItem { Assign null}
+				\begin{lstlisting}
+				int* something = NULL; // before C++11: NULL = 0
+				double* foo = nullptr; // C++11: std::nullptr_t
+				\end{lstlisting}
+				
+			\end{itemize}
+		\end{frame}
+		
+		\begin{frame}[fragile]{Alternative to \textit{raw pointers}. \ttfamily{unique\_ptr<int>}}	
+			\subsection{Alternative to raw pointers. \ttfamily{unique\_ptr<int>}}
+			\begin{itemize}
+			
+				\normalSizeItem { Automatic Memory Management }
+				\begin{lstlisting}[basicstyle={\tiny\ttfamily}]
+				#include <memory>
+				
+				using namespace std;
+				
+				int* giveMeAnInt() { 
+					return new int{100};
+				}
+				
+				unique_ptr<int> giveMeACoolInt() {
+					return unique_ptr<int>(new int{100});
+				}
+				
+				auto giveMeTheBestInt() {
+					return make_unique<int>(100);
+				}
+				
+				int main() {	
+					// unique_ptr automatically releases the memory, int* don't
+					auto number = giveMeTheBestInt();
+					cout << *number << endl;
+					
+					int* otherNumber = giveMeAnInt();
+					delete otherNumber;
+				}
+				\end{lstlisting}				
+			\end{itemize}
+		\end{frame}
+		
+		\begin{frame}[fragile]{Alternative to \textit{raw pointers}. \ttfamily{unique\_ptr<int>}}	
+			\begin{itemize}
+			
+				\normalSizeItem { Automatic Memory Management }
+				\begin{lstlisting}
+				#include <iostream>
+				#include <memory>
+				
+				using namespace std;
+				
+				int main() {	
+					
+					constexpr size_t arrSize { 1000 };
+					
+					unique_ptr<int[]> numbers(new int[arrSize]);
+					//[C++14] auto numbers = make_unique<int[]>(arrSize);
+					
+					fill(&numbers[0], &numbers[arrSize], 10);
+					
+					for (size_t i = 0; i < arrSize; i++) {
+						cout << numbers[i] << endl;
+					}
+				}
+				\end{lstlisting}				
+			\end{itemize}
+		\end{frame}
+		
+		\begin{frame}[fragile]{C++ Castings}	
+			\subsection{C++ Castings}		
+			\begin{itemize}
+			
+				\normalSizeItem { Normal Castings }
+				\begin{lstlisting}
+				int number = 100;
+				float height = (int)number; // C style
+				height = int(number); // C++ style
+				number = static_cast<int>(3.14);
+				// const_cast, dynamic_cast, reinterpret_cast
+				\end{lstlisting}
+				
+				\normalSizeItem { Implicit and explicit conversions }
+				\begin{lstlisting}[basicstyle={\tiny\ttfamily}]
+				struct Foo {
+					// implicit conversion
+					operator int() const { return 7; } 
+					// explicit conversion
+					explicit operator int*() const { return nullptr; }   
+					explicit Foo(size_t elementsCount) { ... }
+				...
+				Foo x;
+				int* q = x; // Error
+				\end{lstlisting}
+				
+			\end{itemize}
+		\end{frame}
+		
+		\begin{frame}[fragile]{Range-based for loop. I/O manipulators}	
+			\subsection{Range-based for loop. I/O manipulators}		
+			\begin{itemize}
+			
+				\normalSizeItem { Modern for-loop for collections [C++11] }
+				\begin{lstlisting}
+				vector<string> names{"daniel", "manuel"};
+				
+				for (const auto& name: names) {
+					cout << names << endl;
+				}
+				
+				\end{lstlisting}
+				
+				\normalSizeItem { Display \texttt{true}/\texttt{false} with \texttt{bool} and use more \texttt{float} precision }
+				\begin{lstlisting}[basicstyle={\tiny\ttfamily}]
+				#include <iomanip>
+				
+				boolalpha(cout); // or: cout.flags(std::ios_base::boolalpha);
+				// "noboolalpha(cout)" to disable it
+				bool isHidden = false;
+				cout << true << ' ' << isHidden << endl; // true false
+				
+				const long double pi = std::acos(-1.L);
+				cout.precision(std::numeric_limits<long double>::digits10 + 1);
+				cout << pi << endl; // 3.141592653589793239
+				\end{lstlisting}
+				
+			\end{itemize}
+		\end{frame}
+		
+		\begin{frame}[fragile]{\ttfamily{numeric\_limits} and \ttfamily{initializer\_list}}	
+			\subsection{\ttfamily{numeric\_limits} and \ttfamily{initializer\_list}}		
+			\begin{itemize}
+			
+				\normalSizeItem { Numeric limits }
+				\begin{lstlisting}[basicstyle={\tiny\ttfamily}]
+				// Formerly [<climits>]
+				INT_MIN // -2147483648
+				LONG_MAX // 9223372036854775807
+				
+				// Nowadays [<cstdint>] y [<limits>]
+				INT32_MIN // -2147483648
+				UINT8_MAX // 255
+				numeric_limits<uint16_t>::max() // 65535
+				numeric_limits<float>::lowest() // -3.40282e+38
+				
+				\end{lstlisting}
+				
+				\normalSizeItem { initializer\_list }
+				\begin{lstlisting}[basicstyle={\tiny\ttfamily}]
+				class vector {
+					vector(...) {}
+					vector(initializer_list ilist) {}
+				...
+				
+				vector numbers = {1,2,3,4}; // vector
+				auto moreNumbers = {1,3,5,7}; // initializer_list
+				\end{lstlisting}
+				
+			\end{itemize}
+		\end{frame}
+		
+		\begin{frame}[fragile]{Random number [C++11]}	
+			\subsection{Random number [C++11]}
+			\begin{itemize}
+			
+				\normalSizeItem { Generate a random number in a range }
+				\begin{lstlisting}
+				#include <vector>
+				#include <random>
+				
+				using namespace std;
+				
+				int main() {	
+					
+					vector<int> numbers {1,2,3,4,5,6};
+					
+					random_device randomDevice;
+					mt19937 generator(randomDevice());
+					
+					uniform_int_distribution<int> randomValue(1, 90);
+					cout << randomValue(generator) << endl;
+				}
+				\end{lstlisting}				
+			\end{itemize}
+		\end{frame}
+		
+		\begin{frame}[fragile]{\ttfamily{<algorithm>} functions}	
+			\begin{itemize}
+			
+				\normalSizeItem { Sort, shuffle, fill, copy... }
+				\begin{lstlisting}[basicstyle={\tiny\ttfamily}]
+				vector<int> numbers {1,2,3,4,5,6};
+	
+				random_device randomDevice;
+				mt19937 generator(randomDevice());
+				
+				// Possible output: 6 4 1 3 2 5 
+				std::shuffle(numbers.begin(), numbers.end(), generator);
+				
+				numbers = {1,2,3,4,5,6};
+				
+				vector<int> numbers2 {9,10};
+				
+				// numbers result: {9,10,3,4,5,6}
+				copy(numbers2.begin(), numbers2.end(), numbers.begin());
+				
+				// Result: 3 4 5 6 9 10
+				sort(numbers.begin(), numbers.end());
+				
+				// What if I want to change the order...?
+				\end{lstlisting}				
+			\end{itemize}
+		\end{frame}
+		
+	\newSectionWithoutIndex{Functional Programming}	
+	
+		\begin{frame}[fragile]{[C++11] Lambda expressions}	
+			\subsection{[C++11] Lambda expressions}		
+			\begin{itemize}
+			
+				\normalSizeItem { Inline functions as parameters }
+				\begin{lstlisting}
+				// Result: 10 9 6 5 4 3 
+				sort(numbers.begin(), numbers.end(), [](int lhs, int rhs) { 
+					return lhs >= rhs; 
+				});
+				
+				\end{lstlisting}	
+				
+				\normalSizeItem { Syntax }
+				\begin{lstlisting}
+				[ capture-list ] ( params ) -> ret { body }
+				
+				capture-list:
+				[a,&b] - Captures "a" by copy, "b" by reference
+				[this] - Captures the current object value
+				[&] - Captures variables by reference
+				[=] - Captures variables by copy
+				[] - Captures nothing
+				\end{lstlisting}	
+							
+			\end{itemize}
+		\end{frame}
+		
+		\begin{frame}[fragile]{[C++11] Lambda expressions}			
+			\begin{itemize}				
+				\normalSizeItem { How to pass functions }
+				\begin{lstlisting}[basicstyle={\tiny\ttfamily}]
+				#include <functional>
+				
+				double operation(double lhs, double rhs, 
+							std::function<double(double,double)> operationFunctor) {
+					return operationFunctor(lhs, rhs);
+				}
+				
+				int main() {
+				
+					double multiply = operation(10, 30.1, [](double lhs, double rhs) {
+						return lhs * rhs;
+					});
+					
+					double add = operation(20.1, 70, [](double lhs, double rhs) {
+						return lhs + rhs;
+					});
+					
+					double number = 1000;
+					double custom = operation(20.1, 70, [&](double lhs, double rhs){
+						return (number * lhs) + rhs;
+					});
+				}
+				\end{lstlisting}
+				
+			\end{itemize}
+		\end{frame}
+		
+		\begin{frame}[fragile]{Filter, Map \& Reduce (evt::Array)\smallCite{Array}}	
+		
+			\begin{itemize}
+				\normalSizeItem { Filter }
+				\begin{lstlisting}
+				Array<string> names {"Daniel", "John", "Peter"};
+				auto filtered = names.filter([](const string& str) {
+					return str.size() > 4;
+				}); // ["Daniel", "Peter"]
+				\end{lstlisting}
+				
+				\normalSizeItem { Map \& Reduce }
+				\begin{lstlisting}
+				size_t totalSize = Array<string>({"names", "john"})
+				    .map<size_t>([](auto str) {
+					    return str.size();
+				    }) // [5, 4]
+				    .reduce<size_t>([](auto total, auto strSize) {
+					    return total + strSize; 
+				    }); // 9
+				\end{lstlisting}
+			\end{itemize}
+		\end{frame}
+
+		\newSectionWithoutIndex{Advanced}
+	
+		\begin{frame}[fragile]{Constant expressions \ttfamily{(constexpr)\smallCite{constexpr}}}	
+			\subsection{Constant expressions \ttfamily{(constexpr)}}		
+			\begin{itemize}
+			
+				\normalSizeItem { Functions }
+				\begin{lstlisting}
+				constexpr uint64_t factorial(int n) {
+					return n <= 1 ? 1 : (n * factorial(n - 1));
+				}
+				
+				int main {
+					// error: static_assert failed "wrong!"
+					static_assert(factorial(2) == 3, "wrong!");
+				}
+				
+				\end{lstlisting}
+				
+				\normalSizeItem { Variables }
+				\begin{lstlisting}
+				constexpr uint64_t factorialResult = factorial(2);
+				// static_assert(factorialResult == 3, "wrong!");
+			
+				constexpr uint64_t other = factorialResult * 2;
+				static_assert(other == 4, "wrong!");
+				\end{lstlisting}
+				
+			\end{itemize}
+		\end{frame}
+		
+		\begin{frame}[fragile]{Constant expressions \ttfamily{(constexpr)}}		
+			\begin{itemize}
+			
+				\normalSizeItem { Objects }
+				\begin{lstlisting}
+				class Circle {
+					int x_;
+					int y_;
+					int radius_;
+				public:
+					constexpr Circle (int x, int y, int radius): 
+						x_(x), y_(y), radius_(radius) {}
+					constexpr double area() const {
+						return radius_ * radius_ * 3.1415926;
+					}
+					// ...
+				};
+				
+				int main() {
+					constexpr auto myCircle = Circle(10,20,30);
+					static_assert(myCircle.area() < 3000, "wrong!");
+				}
+				
+				\end{lstlisting}
+			\end{itemize}
+		\end{frame}
+		
+		\begin{frame}[fragile]{Constant expressions \ttfamily{(constexpr)}}	
+			\begin{itemize}
+				\normalSizeItem { Compile-time check }
+				\begin{lstlisting}
+				#include <type_traits> // is_unsigned, is_object, etc
+				
+				template <typename Type>
+				void doSomething(Type something) {	
+					if constexpr (std::is_same<Type, int>()) {
+						Type number = something * 10;
+						cout << "int!!: " << number << endl;
+					}
+					else if constexpr (std::is_same<Type, string>()) {
+						Type str = something;
+						cout << "string!!: " << str.length() << endl;
+					}
+				}
+	
+				int main() {
+					doSomething(800);
+					doSomething("Daniel"s);
+				}
+				\end{lstlisting}
+			\end{itemize}
+		\end{frame}
+		
+		\begin{frame}[fragile]{Optional value}	
+			\subsection{Optional value}
+			\begin{itemize}
+				\normalSizeItem { Sometimes we should not (or we can't) return an specific value }
+				\begin{lstlisting}[basicstyle={\tiny\ttfamily}]
+				#include <iostream>
+				#include <vector>
+				#include <experimental/optional>
+				
+				using namespace std::experimental;
+				
+				size_t indexOf(int number, std::vector<int> numbers) {
+					for (size_t i = 0; i < numbers.size(); i++) {
+						if (number == numbers[i]) { 
+							return i; 	
+						}
+					}
+					return 0; // It's confusing... what if the valid returned position is 0
+				}
+				
+				std::optional<size_t> safeIndexOf(int number, std::vector<int> numbers) {
+					for (size_t i = 0; i < numbers.size(); i++) {
+						if (number == numbers[i]) {
+							return i;
+						}
+					}
+					return nullopt;
+				}
+				\end{lstlisting}
+			\end{itemize}
+		\end{frame}
+		
+		\begin{frame}[fragile]{Optional value}	
+			\begin{itemize}
+				\normalSizeItem { The most secure (\& elegant) way is by using an optional value }
+				\begin{lstlisting}
+				int main() {
+	
+					vector<int> otherNumbers{};
+				
+					size_t index = indexOf(100, otherNumbers);
+					// Segmentation fault
+					// cout << otherNumbers[index] << endl;
+					
+					vector<int> numbers{1,2,3,4,10};
+					if (auto index2 = safeIndexOf(100, numbers)) {
+						cout << numbers[*index2] << endl;
+						// index2.value_or(0)
+					}
+				}
+				\end{lstlisting}
+			\end{itemize}
+		\end{frame}
+		
+		\begin{frame}[fragile]{Optional value}
+			\begin{itemize}
+				\normalSizeItem { Returned value by an array when you access a position }
+				\begin{lstlisting}
+				inline optional<Type> at(const size_t index) const {
+					if (index >= count_) {
+						return nullopt;
+					} else {
+						return this->values[index];
+					}
+				}
+				\end{lstlisting}
+			\end{itemize}
+		\end{frame}
+		
+		\begin{frame}[fragile]{\ttfamily{std::enable\_if<>}}
+			\subsection{\ttfamily{std::enable\_if<>}}	
+			\begin{itemize}
+				\normalSizeItem { Template type constraints }
+				\begin{lstlisting}
+				#include <type_traits>
+				
+				template <typename ArithmeticType, 
+					typename = typename std::enable_if<
+						std::is_arithmetic<ArithmeticType>::value
+					>::type>
+				ArithmeticType doSomething(ArithmeticType number) {
+					return number * 100;
+				}
+				
+				int main() {
+				
+					doSomething(800); // OK
+					
+					// candidate template ignored: disabled by 'enable_if'
+					doSomething("Daniel"s); // ERROR 
+				}
+				\end{lstlisting}
+			\end{itemize}
+		\end{frame}
+		
+		\begin{frame}[fragile]{Good practices and tips for classes}	
+			\subsection{Good practices and tips for classes}
+			\begin{itemize}
+				\normalSizeItem { include/Human.hpp }
+				\begin{lstlisting}[basicstyle={\tiny\ttfamily}]
+				#pragma once // instead of the classic guards (#ifndef...)
+				
+				#include <cstdint>
+				#include <string_view> // C++17
+				// using namespace std; // Don't use in .h, .hpp files
+
+				namespace evt { // HIGHLY recommended
+					class Human {
+						// Direct variable initialization [c++11]
+						// NEVER use underscores at the beginning of a name
+						uint8_t age_{};
+						std::string_view name_{};
+					public:
+						// constexpr Human(){} // Might or might not make sense
+						constexpr Human(const uint8_t age, const std::string_view& name): age_(age), name_(name) {}
+						
+						constexpr uint8_t age() const {  
+							return this->age_;
+						}
+						constexpr std::string_view name() const { 
+							return this->name_;
+						}
+					};
+				}
+				\end{lstlisting}
+			\end{itemize}
+		\end{frame}
+		
+		\begin{frame}[fragile]{Buenas prácticas y consejos para clases}	
+			\begin{itemize}
+				\normalSizeItem { Main.cpp }
+				\begin{lstlisting}[basicstyle={\tiny\ttfamily}]
+				#include "include/Human.hpp"
+				
+				// using namespace evt; (opcional)
+				
+				// using namespace evt; (opcional)
+				
+				// Is not advisable to pass complex types by copy...
+				// void giveMeTheObject(evt::Human human) { ... }
+				
+				// ... or by reference (the object could be modified)
+				// void giveMeTheObject(evt::Human& human) { ... }
+				
+				// The best way is by constant reference
+				void giveMeTheObject(const evt::Human& human) { ... }
+				
+				int main() {
+					constexpr evt::Human daniel(10, "Daniel");
+					static_assert(daniel.name() == "Daniel", "incorrect!");
+				}
+				\end{lstlisting}
+			\end{itemize}
+		\end{frame}
+		
+	\newSectionWithoutIndex{Compilation}	
+  
+		\begin{frame}[fragile]{Compilation with new C++ versions}	
+			\subsection{Compile with C++11 code}
+			\begin{itemize}
+			
+				\normalSizeItem {Add the C++ version after \texttt{-std=}}
+				\begin{lstlisting}
+				g++ main.cpp -std=c++11
+				g++ main.cpp -std=c++14
+				g++ main.cpp -std=c++17 // o: 1z
+				\end{lstlisting}
+				
+				\normalSizeItem {\textit{Flags} recomendados}
+				\begin{lstlisting}
+				-Wall ->	  Enables important warnings
+				-Wextra ->	Enables more warnings
+				-O1 / -O2 / -Os / -O3 / -fast ->	Optimizations
+				~~
+				g++ main.cpp -std=c++14 -Wall -Wextra -Os
+				\end{lstlisting}
+				
+			\end{itemize}
+		\end{frame}
+		
+		\begin{frame}[fragile]{\texttt{Makefile} example}	
+			\subsection{\texttt{Makefile} example}
+			\begin{itemize}
+			
+				\normalSizeItem {Complete Example}
+				\begin{lstlisting}
+				## FLAGS ##
+				Libraries = -L lib
+				Headers = -I include
+				Sources = main.cpp $(Headers) $(Libraries)
+				CompilerFlags = -std=c++14 -Os -Wall -Wextra
+				OutputName = test
+				
+				## TARGETS ##
+				all: 
+					@g++ $(CompilerFlags) $(Sources) -o $(OutputName)
+				
+				clean:
+					@rm -i $(OutputName)*
+				\end{lstlisting}
+				
+			\end{itemize}
+		\end{frame}
+		
+	\newSectionWithoutIndex{Reference}	
+		\tiny
+		\begin{frame}[allowframebreaks]{Reference}
+			\bibliographystyle{plainurl}
+			\bibliography{References}
+			\small
+			Suggestions:
+			\begin{itemize}
+				\urlItem{http://devdocs.io}
+				\urlItem{https://tex.stackexchange.com}
+			\end{itemize}
+		\end{frame}
+\end{document}
