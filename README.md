@@ -6,7 +6,7 @@ Theme used by this presentation: [Metropolis](https://github.com/matze/mtheme)
 
 -> Versión en español: https://github.com/illescasDaniel/Modern-Cpp-Spanish
 
-# Preview
+# [Preview](slides.pdf)
 
 ![Title](screenshots/title.png)
 
