@@ -28,4 +28,4 @@ Anybody has permissions to download, modify or redistribute these slides.
 
 The only requirement is to include the LICENSE file.
 
-More info: https://github.com/illescasDaniel/Modern-Cpp-Slides/blob/master/LICENSE
+[More info](LICENSE)
