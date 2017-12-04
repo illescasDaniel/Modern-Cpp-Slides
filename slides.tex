@@ -256,25 +256,47 @@
 				\begin{lstlisting}
 				// It doesn't work in the Windows command line (CMD)
 				std::system("ls -l > test.txt");
+				
+				// Only works in Windows :/
+				std::system("pause"); 
 				\end{lstlisting}
 				
+				\item { 
+					
+					Some solutions: 
+								
+					\begin{itemize}
+						\item {
+							We can use this class to list all files in a folder:
+							 \begin{verbatim}
+							 	std::filesystem::recursive_directory_iterator
+							 \end{verbatim}
+						}
+						\item {
+							To pause the program execution: \texttt{cin.ignore();}
+						}
+					\end{itemize}
+				}
+			\end{itemize}
+		\end{frame}
+		
+		\begin{frame}[fragile]{Platform dependency}	
+			\subsection{Platform dependency}		
+			\begin{itemize}
 				\normalSizeItem { If you use old and dependent libraries you can't get \textbf{portable} code \smallCite{posixThreads}}
-				\begin{lstlisting}[basicstyle={\tiny\ttfamily}]
-				#include <pthread.h>
-
-				void* print_message_function(void* ptr) {
-					char *message;
-					message = (char *) ptr;
-					printf("%s \n", message);
-				}
-				
-				int main() {
-			
-					int iret1 = pthread_create(&thread1, NULL, print_message_function, (void*) message1);
-				}
-
-				\end{lstlisting}
-				
+						\begin{lstlisting}[basicstyle={\tiny\ttfamily}]
+						#include <pthread.h>
+		
+						void* print_message_function(void* ptr) {
+							char *message;
+							message = (char *) ptr;
+							printf("%s \n", message);
+						}
+						
+						int main() {
+							int iret1 = pthread_create(&thread1, NULL, print_message_function, (void*) message1);
+						}
+					\end{lstlisting}
 			\end{itemize}
 		\end{frame}
 		
